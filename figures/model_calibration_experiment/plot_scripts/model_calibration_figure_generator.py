@@ -19,7 +19,7 @@ file_tree = OrderedDict({
     "DaG": "../../../disease_gene/disease_associates_gene/model_calibration_experiment/output/dag_calibration.tsv",
     "CtD": "../../../compound_disease/compound_treats_disease/model_calibration_experiment/output/ctd_calibration.tsv",
     "CbG": "../../../compound_gene/compound_binds_gene/model_calibration_experiment/output/cbg_calibration.tsv",
-    #"GiG": "../../../gene_gene/gene_interacts_gene/model_calibration_experiment/output/gig_calibration.tsv"
+    "GiG": "../../../gene_gene/gene_interacts_gene/model_calibration_experiment/output/gig_calibration.tsv"
 })
 
 
@@ -47,7 +47,7 @@ color_map = {
 }
 
 
-# In[5]:
+# In[14]:
 
 
 g = (
@@ -60,6 +60,11 @@ g = (
         "after":color_map["after"]
     })
     + p9.facet_wrap("relation")
+    + p9.labs(
+        x="Predicted",
+        y="Actual"
+    )
+    + p9.guides(color=p9.guide_legend(title="Model Calibration"))
     + p9.theme_bw()
 )
 print(g)
