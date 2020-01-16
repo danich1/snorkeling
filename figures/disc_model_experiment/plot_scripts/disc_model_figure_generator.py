@@ -57,7 +57,7 @@ color_map = {
 disc_data_tree = {
     "DaG": "../../../disease_gene/disease_associates_gene/disc_model_experiment/output/*tsv",
     "CtD": "../../../compound_disease/compound_treats_disease/disc_model_experiment/output/*tsv",
-    #"GiG": "../../../gene_gene/gene_interacts_gene/disc_model_experiment/output/*tsv",
+    "GiG": "../../../gene_gene/gene_interacts_gene/disc_model_experiment/output/*tsv",
     "CbG": "../../../compound_gene/compound_binds_gene/disc_model_experiment/output/*tsv"
 }
 
