@@ -1,0 +1,106 @@
+%load_ext autoreload
+%autoreload 2
+%matplotlib inline
+
+from collections import Counter
+from itertools import product
+import os
+import pickle
+import sys
+
+sys.path.append(os.path.abspath('../../../modules'))
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from tqdm import tqdm_notebook
+
+sns.set(rc={'figure.figsize':(12,6), "font.size":17})
+
+#Set up the environment
+username = "danich1"
+password = "snorkel"
+dbname = "pubmeddb"
+
+#Path subject to change for different os
+database_str = "postgresql+psycopg2://{}:{}@/{}?host=/var/run/postgresql".format(username, password, dbname)
+os.environ['SNORKELDB'] = database_str
+
+from snorkel import SnorkelSession
+session = SnorkelSession()
+
+from snorkel.models import candidate_subclass, Candidate
+CompoundGene = candidate_subclass('CompoundGene', ['Compound', 'Gene'])
+
+from utils.notebook_utils.dataframe_helper import write_candidates_to_excel, make_sentence_df
+
+edge_level_df = pd.read_csv("input/compound_binds_gene.tsv.xz", sep="\t")
+edge_level_df.head(2)
+
+sql = '''
+select cand_id as candidate_id, drugbank_id, entrez_gene_id, sentence_id, text, array_length(words, 1) as sen_length from (
+    select cand_id, "Gene_cid" as entrez_gene_id, "Compound_cid" as drugbank_id, sentence_id from 
+        (
+            select compound_gene.id as "cand_id", compound_gene."Compound_id",
+            compound_gene."Gene_cid", compound_gene."Compound_cid", candidate.split from compound_gene 
+            inner join candidate on compound_gene.id=candidate.id 
+        ) as candidate_splits inner join span on candidate_splits."Compound_id"=span.id
+    ) as candidate_sen inner join sentence on candidate_sen.sentence_id=sentence.id
+'''
+candidate_sentence_df = pd.read_sql(sql, database_str).astype({"entrez_gene_id": int})
+candidate_sentence_df.head(2)
+
+total_candidates_df= (
+    edge_level_df
+    .merge(candidate_sentence_df, on=["drugbank_id", "entrez_gene_id"])
+)
+total_candidates_df.head(2)
+
+dev_candidates = (
+    session
+    .query(CompoundGene)
+    .filter(
+        CompoundGene.id.in_(
+            total_candidates_df
+            .query("split==7")
+            .sample(10000, random_state=100)
+            .candidate_id
+            .tolist()
+        )
+    )
+    .all()
+)
+dev_df = make_sentence_df(dev_candidates)
+dev_df.head(2)
+
+test_candidates = (
+    session
+    .query(CompoundGene)
+    .filter(
+        CompoundGene.id.in_(
+            total_candidates_df
+            .query("split==8")
+            .sample(10000, random_state=100)
+            .candidate_id
+            .tolist()
+        )
+    )
+    .all()
+)
+test_df = make_sentence_df(test_candidates)
+test_df.head(2)
+
+#write_candidates_to_excel(dev_df, "../data/sentences/sentence_labels_dev.xlsx")
+#write_candidates_to_excel(test_df, "../data/sentences/sentence_labels_test.xlsx")
+
+sns.distplot(total_candidates_df["sen_length"], rug=False)
+
+total_candidates_df["sen_length"].describe().astype(int)
+
+total_candidates_df.query("sen_length==641").iloc[0]["text"]
+
+sns.distplot(total_candidates_df.query("sen_length < 83+1")["sen_length"], rug=False)
+
+total_candidates_df.query("sen_length < 83+1")["sen_length"].describe().astype(int)
+
+total_candidates_df.to_csv("output/all_cbg_candidates.tsv.xz", sep="\t", index=False, compression="xz")
