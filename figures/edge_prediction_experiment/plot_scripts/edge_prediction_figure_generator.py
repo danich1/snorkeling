@@ -14,6 +14,7 @@ import plotnine as p9
 import matplotlib as pyplot
 import matplotlib.colors as mcolors
 import scipy.stats as ss
+from sklearn.metrics import roc_curve
 
 
 # In[2]:
@@ -148,15 +149,24 @@ for rel in combined_sen_tree:
         })
         .reset_index()
     )
+    
+    fpr, tpr, threshold = roc_curve(
+        df.hetionet.values,
+        df.pred.values
+    )
+
+    fnr = 1 - tpr
+    optimal_threshold = threshold[pd.np.nanargmin(pd.np.absolute((fnr - fpr)))]
+    
     datarows.append({
-        "recall":df.query("pred > 0.5").hetionet.value_counts()[1]/df.hetionet.value_counts()[1],
-        "edges":df.query("pred > 0.5").hetionet.value_counts()[1],
+        "recall":df.query("pred > @optimal_threshold").hetionet.value_counts()[1]/df.hetionet.value_counts()[1],
+        "edges":df.query("pred > @optimal_threshold").hetionet.value_counts()[1],
         "in_hetionet": "Existing",
         "relation": rel,
         "total": int(df.hetionet.value_counts()[1])
     })
     datarows.append({
-        "edges":df.query("pred > 0.5").hetionet.value_counts()[0],
+        "edges":df.query("pred > @optimal_threshold").hetionet.value_counts()[0],
         "in_hetionet": "Novel",
         "relation": rel
     })
