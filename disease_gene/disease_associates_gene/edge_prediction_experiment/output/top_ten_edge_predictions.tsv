@@ -1,0 +1,11 @@
+edge_type	doid_name	gene_symbol	gen_pred	pred	n_sentences	hetionet	text
+DaG	urinary bladder cancer	TP53	1	0.945	2112	Existing	conclusion : our findings indicate that the dsp53-285 can upregulate wild-type ~~[[2 p53 2]]~~ expression in human ~~[[1 bladder cancer 1]]~~ cells through rna activation , and suppresses cells proliferation and metastasis in vitro and in vivo .
+DaG	ovarian cancer	EGFR	1	0.937	1330	Existing	conclusion : our data showed that increased expression of ~~[[2 egfr 2]]~~ is associated with poor prognosis of patients with ~~[[1 eoc 1]]~~ and dacomitinib may act as a novel , useful chemotherapy drug .
+DaG	stomach cancer	TP53	1	0.937	2679	Existing	conclusion : this meta-analysis suggests that ~~[[2 p53 2]]~~ arg72pro polymorphism is associated with increased risk of ~~[[1 gastric cancer 1]]~~ in asians .
+DaG	lung cancer	TP53	1	0.936	6813	Existing	conclusion : these results suggest that high expression of the ~~[[2 p53 2]]~~ oncoprotein is a favorable prognostic factor in a subset of patients with ~~[[1 nsclc 1]]~~ .
+DaG	breast cancer	TCF7L2	1	0.936	56	Existing	this meta-analysis demonstrated that ~~[[2 tcf7l2 2]]~~ gene polymorphisms ( rs12255372 and rs7903146 ) are associated with an increased susceptibility to ~~[[1 breast cancer 1]]~~ .
+DaG	skin cancer	COX2	1	0.935	73	Novel	elevated expression of ~~[[2 cox-2 2]]~~ has been associated with tumor progression in ~~[[1 skin cancer 1]]~~ through multiple mechanisms .
+DaG	thyroid cancer	VEGFA	1	0.933	592	Novel	as a conclusion , we suggest that ~~[[2 vegf 2]]~~ g +405 c polymorphism is associated with increased risk of ~~[[1 ptc 1]]~~ .
+DaG	stomach cancer	EGFR	1	0.933	1237	Existing	recently , high lymph node ratio is closely associated with ~~[[2 egfr 2]]~~ expression in advanced ~~[[1 gastric cancer 1]]~~ .
+DaG	liver cancer	GPC3	1	0.933	1944	Novel	conclusions serum ~~[[2 gpc3 2]]~~ was overexpressed in ~~[[1 hcc 1]]~~ patients .
+DaG	stomach cancer	CCR6	1	0.931	24	Novel	the cox regression analysis showed that high expression of ~~[[2 ccr6 2]]~~ was an independent prognostic factor for ~~[[1 gc 1]]~~ patients .
