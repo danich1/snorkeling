@@ -124,9 +124,36 @@ g = (
         "our_model":color_map["our_model"],
         "coco_score":color_map["coco_score"]
     }) +
-    p9.guides(color=p9.guide_legend(title="Models")) + 
+    p9.guides(fill=p9.guide_legend(title="Models")) + 
+    p9.labs(
+        y = "AUROC",
+        x = "Edge Type",
+        title="Baseline Comparison of Hetionet Edge Prediction (AUROC)"
+    ) +
     p9.theme_bw()
 )
 print(g)
 g.save(filename="../coco_score_auroc.png", dpi=300)
+
+
+# In[8]:
+
+
+g = (
+    p9.ggplot(results_df, p9.aes(x="relation", y="aupr", fill="model")) +
+    p9.geom_col(position="dodge")  + 
+    p9.scale_fill_manual(values={
+        "our_model":color_map["our_model"],
+        "coco_score":color_map["coco_score"]
+    }) +
+    p9.guides(fill=p9.guide_legend(title="Models")) + 
+    p9.labs(
+        y = "AUPR",
+        x = "Edge Type",
+        title="Baseline Comparison of Hetionet Edge Prediction (AUPR)"
+    ) +
+    p9.theme_bw()
+)
+print(g)
+g.save(filename="../coco_score_aupr.png", dpi=300)
 
